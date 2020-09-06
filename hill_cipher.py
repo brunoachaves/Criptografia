@@ -12,9 +12,8 @@ enc_key = np.array([[1, 0, 0],
                     [1, 2, 0]])
 
 # Convertendo o dado de entrada para uma matriz multiplicavel pela chave
-data_matrix = np.array(list(data_in)).reshape(5, 3)
-print('\ninput data:')
-print(data_matrix)
+print('\ninput encrypted data')
+print(data_in)
 
 # Decodificação
 # 1 - Converta os dados de entrada para seus representantes numéricos
@@ -27,6 +26,8 @@ print(data_matrix)
 
 # 1. Criando uma lista com os números correspondentes à cada dígito do dado de entrada
 p = [ord(i) for i in data_in]
+print('\nencrypted text values:')
+print(p)
 
 # 2. Calculando o inverso da chave de criptografia
 inv = np.linalg.inv(enc_key)
