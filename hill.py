@@ -1,36 +1,54 @@
 #!/usr/bin/env python
+import numpy as np
 
-def convert(data_in, key_in, action_in):
-    # Criando a lista do alfabeto minusculo de 'a' à 'z' e definindo seu tamanho
-    alphabet = [chr(x) for x in range(ord('A'), ord('Z') + 1)]
-    alphabet_sz = len(alphabet)
+# Definindo tamanho do alfabeto, dados de entrada e chave de criptografia
 
-    # Criando uma lista com os números correspondentes à cada letra do texto e da chave
-    p = [alphabet.index(i) for i in data_in]
-    k = [alphabet.index(i) for i in key_in]
+data_in = 'SŢÕVŝØOƙóMŢÏEŰá'
 
-    # Definindo o tamanho do texto (n) e da chave (m)
-    n = len(p)
-    m = len(k)
+alphabet_sz = 65536
 
-    if action_in:  # Criptografar
-        converted = [alphabet[(p[i]+k[i % m]) % alphabet_sz] for i in range(n)]
-    else:  # Decriptografar
-        converted = [alphabet[(p[i]-k[i % m]) % alphabet_sz] for i in range(n)]
+enc_key = np.array([[1, 0, 0],
+                    [1, 3, 1],
+                    [1, 2, 0]])
 
-    return "".join(converted)  # Juntando os elementos da lista para formar uma mesma string
+# Convertendo o dado de entrada para uma matriz multiplicavel pela chave
+data_matrix = np.array(list(data_in)).reshape(5, 3)
+print('\ninput data:')
+print(data_matrix)
 
+# Decodificação
+# 1 - Converta os dados de entrada para seus representantes numéricos
+# 2 - Calcule o inverso da matriz usada como chave de criptografia
+# 3 - Redimencione a lista de dados de entrada para virar uma matriz multiplicável pela inversa da chave
+# 4 - Multiplique a matriz inversa pela matriz redimensionada com os dados de entrada
+# fazendo o módulo pelo tamanho do alfabeto utilizado
+# 5 - Redimensione a matriz resultante para uma lista
+# 6 - Retorne os dados numérios para caracteres
 
-if __name__ == '__main__':
-    # Listas com as palavras que podem ser apresentadas no enunciado
-    action_msg = ['decriptografar', 'criptografar']
-    result_msg = ['decriptografado', 'criptografado']
+# 1. Criando uma lista com os números correspondentes à cada dígito do dado de entrada
+p = [ord(i) for i in data_in]
 
-    # Recebimento das variáveis do processo
-    action = '1' in input('\nVocê deseja criptografar <1> ou decriptografar uma mensagem <2>?\n')
-    text = input(f'\nDigite o texto que deseja {action_msg[action]}?\n').upper()
-    key = input(f'\nDigite a chave que deseja usar:\n').upper()
+# 2. Calculando o inverso da chave de criptografia
+inv = np.linalg.inv(enc_key)
+print('\ninverse key:')
+print(inv)
 
-    # Apreentação do resultado
-    print(f'\nTexto {result_msg[action]}:')
-    print(convert(text, key, action))
+# 3. Redimensionando a lista de dados de entrada para virar uma matriz multiplicável pela inversa da chave
+p_matrix = np.array(list(p)).reshape(5, 3).transpose()
+print('\ndata values:')
+print(p_matrix)
+
+# 4. Multiplicando a matriz inversa pela matriz redimensionada com os dados de entrada
+dec_matrix = np.dot(inv, p_matrix) % alphabet_sz
+print('\ndecrypted matrix:')
+print(dec_matrix)
+
+# 5 - Redimensionando a matriz resultante para uma lista
+dec_list = dec_matrix.transpose().flatten()
+print('\nlist of decrypted values')
+print(dec_list)
+
+# 6 - Retornando os dados numérios para caracteres
+converted = [chr(int(j)) for j in dec_list]
+print(f'\noriginal data: {data_in}')
+print(f'converted data: {"".join(converted)}')  # Convertendo a lista de chars para uma única string
