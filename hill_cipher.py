@@ -11,7 +11,6 @@ enc_key = np.array([[1, 0, 0],
                     [1, 3, 1],
                     [1, 2, 0]])
 
-# Convertendo o dado de entrada para uma matriz multiplicavel pela chave
 print('\ninput encrypted data')
 print(data_in)
 
