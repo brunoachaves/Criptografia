@@ -7,8 +7,6 @@ import os
 def print_hex_list(int_list):
     """Print ciphertext in hex"""
     for index, elem in enumerate(int_list):
-        if index % 32 == 0:
-            print()
         print("{:02x}".format(elem), end="")
     print()
 
@@ -17,8 +15,6 @@ def print_large_integer(number):
     """Print long primes in a formatted way"""
     string = "{:02x}".format(number)
     for j in range(len(string)):
-        if j % 64 == 0 and j > 0:
-            print()
         print(string[j], end="")
     print()
 
@@ -56,26 +52,25 @@ if __name__ == '__main__':
 
     n_min = 1 << (bit_length - 1)
     n_max = (1 << bit_length) - 1
-    p, q , n= get_primes(n_min, n_max)
+    p, q, n = get_primes(n_min, n_max)
+    print(f'\nTamanho da chave = {len(bin(n)[2:])} bits')
     print('\nPrimeiro número primo:')
     print_large_integer(p)
     print('\nSegundo número primo:')
     print_large_integer(q)
-    print(f'\nTamanho da chave = {len(bin(n)[2:])} bits')
 
     phi = (p - 1) * (q - 1)
-    print('\nFunção totiente:')
-    print_large_integer(phi)
-
     e = 65635
     while np.gcd(e, phi) > 1:
         e += 2
-    print('\ne:')
-    print(e)
-
     d = mod_inv(e, phi)
-    print(f'\nd:')
-    print_large_integer(d)
+
+    # print('\nFunção totiente:')
+    # print_large_integer(phi)
+    # print('\ne:')
+    # print(e)
+    # print(f'\nd:')
+    # print_large_integer(d)
 
     encrypted = pow(ord(data_in), e, n)
     decrypted = pow(encrypted, d, n)
