@@ -83,7 +83,7 @@ if __name__ == '__main__':
     # Decriptando o texto
     decrypted_list = reduce(lambda x, y: (x << 8) + y, encrypted_list[:bit_length + 2])
     decrypted_int = pow(decrypted_list, d, n)
-    decrypted = "".join([chr((decrypted_int >> j) & 0xff) for j in reversed(range(0, bit_length << 3, 8))])
+    decrypted = "".join([chr((decrypted_int >> j) & 0xff) for j in reversed(range(0, bit_length, 8))])
     print('\nDado decriptado:')
     print(decrypted)
 
